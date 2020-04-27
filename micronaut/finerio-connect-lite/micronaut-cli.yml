@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: com.finerioconnect.lite
+---
+testFramework: spock
+sourceLanguage: groovy

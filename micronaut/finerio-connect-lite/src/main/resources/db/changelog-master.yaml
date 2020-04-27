@@ -1,0 +1,7 @@
+databaseChangeLog:
+- include:
+    file: db/user.yaml
+- include:
+    file: db/role.yaml
+- include:
+    file: db/user_role.yaml

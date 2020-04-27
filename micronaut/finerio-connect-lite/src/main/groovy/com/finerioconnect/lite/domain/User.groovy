@@ -23,7 +23,6 @@ class User implements GormEntity<User>, UserState {
 
   static mapping = { 
     table 'user'
-    password column: '`password`'
   }
 
 }

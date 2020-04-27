@@ -5,7 +5,7 @@ import io.micronaut.security.authentication.providers.UserState
 import org.grails.datastore.gorm.GormEntity
 
 @Entity 
-class UserApiData implements GormEntity<User> { 
+class UserApiData implements GormEntity<UserApiData> {
 
   User user
   String username

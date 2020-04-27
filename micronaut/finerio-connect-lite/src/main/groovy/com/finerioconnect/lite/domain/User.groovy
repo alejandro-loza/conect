@@ -13,6 +13,8 @@ class User implements GormEntity<User>, UserState {
   boolean accountExpired = false
   boolean accountLocked = false
   boolean passwordExpired = false
+  Date dateCreated
+  Date lastUpdated
 
   static constraints = { 
     username nullable: false, blank: false, unique: true

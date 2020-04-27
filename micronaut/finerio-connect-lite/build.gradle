@@ -46,6 +46,7 @@ dependencies {
     runtime 'mysql:mysql-connector-java:5.1.39'
     runtime "org.apache.tomcat:tomcat-jdbc"
     implementation "org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}"
+    implementation "io.micronaut.configuration:micronaut-liquibase"
 
 }
 

@@ -37,6 +37,16 @@ dependencies {
     testImplementation "io.micronaut:micronaut-inject-groovy"
     testImplementation "io.micronaut.test:micronaut-test-spock"
     testImplementation "io.micronaut.test:micronaut-test-junit5"
+
+    // Project dependencies added
+    implementation "io.micronaut:micronaut-security-jwt"
+    implementation "io.micronaut.configuration:micronaut-hibernate-validator"
+    implementation "io.micronaut.configuration:micronaut-hibernate-gorm"
+    implementation "org.grails:grails-datastore-gorm-hibernate5"
+    runtime 'mysql:mysql-connector-java:5.1.39'
+    runtime "org.apache.tomcat:tomcat-jdbc"
+    implementation "org.springframework.security:spring-security-crypto:${springSecurityCryptoVersion}"
+
 }
 
 test.classpath += configurations.developmentOnly
@@ -52,5 +62,5 @@ shadowJar {
 
 tasks.withType(JavaExec) {
     classpath += configurations.developmentOnly
-    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.config.files=file:application.yml')
 }

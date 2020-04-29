@@ -2,7 +2,7 @@ package com.finerioconnect.lite.services
 
 import com.finerioconnect.lite.Application
 import com.finerioconnect.lite.domain.UserApiData
-import com.finerioconnect.lite.dtos.CreateCustomerDto
+import com.finerioconnect.lite.dtos.CreateCredentialDto
 
 import io.micronaut.test.annotation.MicronautTest
 
@@ -11,7 +11,7 @@ import javax.inject.Inject
 import spock.lang.Specification
 
 @MicronautTest(application = Application.class)
-class FinerioConnectApiServiceCreateCustomerSpec
+class FinerioConnectApiServiceCreateCredentialSpec
     extends FinerioConnectLiteSpecification {
 
   @Inject
@@ -27,14 +27,17 @@ class FinerioConnectApiServiceCreateCustomerSpec
         clientId: props.'finerio-connect.clientId',
         clientSecret: props.'finerio-connect.clientSecret'
       )
-      def createCustomerDto = new CreateCustomerDto(
-        name: UUID.randomUUID().toString()
+      def createCredentialDto = new CreateCredentialDto(
+        customerId: props.'finerio-connect.customerId' as Long,
+        bankId: props.'finerio-connect.bankId' as Long,
+        username: props.'finerio-connect.credentialUsername',
+        password: props.'finerio-connect.credentialPassword'
       )
     when:
-      def customerDto = finerioConnectApiService.createCustomer(
-          userApiData, createCustomerDto )
+      def credentialDto = finerioConnectApiService.createCredential(
+          userApiData, createCredentialDto )
     then:
-      customerDto != null
+      credentialDto != null
 
   }
 

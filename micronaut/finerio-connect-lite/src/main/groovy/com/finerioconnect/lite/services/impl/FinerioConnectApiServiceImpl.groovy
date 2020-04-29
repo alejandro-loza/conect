@@ -1,7 +1,9 @@
 package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.UserApiData
+import com.finerioconnect.lite.dtos.CreateCredentialDto
 import com.finerioconnect.lite.dtos.CreateCustomerDto
+import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.dtos.LoginRequestDto
 import com.finerioconnect.lite.dtos.LoginResponseDto
@@ -20,16 +22,29 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
   FinerioConnectClient finerioConnectClient
 
   @Override
-  CustomerDto createCustomer( CreateCustomerDto createCustomerDto )
+  CustomerDto createCustomer( UserApiData userApiData,
+      CreateCustomerDto createCustomerDto )
       throws Exception {
 
-    def userApiData = createCustomerDto.userApiData
-    def authorizationHeader = "Bearer ${getAccessToken( userApiData )}"
     return finerioConnectClient.createCustomer(
-        authorizationHeader, createCustomerDto.name )
+        getAuthorizationHeader( userApiData ), createCustomerDto.name )
 
   }
   
+  @Override
+  CredentialDto createCredential( UserApiData userApiData,
+      CreateCredentialDto createCredentialDto ) throws Exception {
+
+    return finerioConnectClient.createCredential(
+        getAuthorizationHeader( userApiData ), createCredentialDto )
+
+  }
+
+  private String getAuthorizationHeader( UserApiData userApiData )
+      throws Exception {
+    return "Bearer ${getAccessToken( userApiData )}"
+  }
+
   private String getAccessToken( UserApiData userApiData )
       throws Exception {
 

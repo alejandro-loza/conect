@@ -1,5 +1,7 @@
 package com.finerioconnect.lite.httpclient
 
+import com.finerioconnect.lite.dtos.CreateCredentialDto
+import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.dtos.LoginRequestDto
 import com.finerioconnect.lite.dtos.LoginResponseDto
@@ -23,5 +25,9 @@ interface FinerioConnectClient {
 
   @Post('/customers')
   CustomerDto createCustomer( @Header String authorization, String name )
+
+  @Post('/credentials')
+  CredentialDto createCredential( @Header String authorization,
+      @Body CreateCredentialDto createCredentialDto )
 
 }

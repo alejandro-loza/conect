@@ -3,7 +3,9 @@ package com.finerioconnect.lite.services
 import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.domain.UserApiData
 import com.finerioconnect.lite.dtos.CreateCredentialDto
+import com.finerioconnect.lite.dtos.CreateCustomerDto
 import com.finerioconnect.lite.dtos.CredentialDto
+import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.services.impl.CredentialServiceImpl
 
 import io.micronaut.security.utils.SecurityService
@@ -45,6 +47,8 @@ class CredentialServiceCreateSpec extends Specification {
       1 * userGormService.findByUsername( _ as String ) >> new User()
       1 * userApiDataGormService.findByUser( _ as User ) >>
           new UserApiData()
+      1 * finerioConnectApiService.createCustomer( _ as UserApiData,
+          _ as CreateCustomerDto ) >> new CustomerDto()
       1 * finerioConnectApiService.createCredential( _ as UserApiData,
           _ as CreateCredentialDto ) >> new CredentialDto()
       result instanceof CredentialDto

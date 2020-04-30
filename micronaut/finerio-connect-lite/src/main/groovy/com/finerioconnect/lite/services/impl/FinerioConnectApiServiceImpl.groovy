@@ -13,8 +13,6 @@ import com.finerioconnect.lite.services.FinerioConnectApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
-import io.micronaut.security.utils.SecurityService
-
 @Singleton
 class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
 

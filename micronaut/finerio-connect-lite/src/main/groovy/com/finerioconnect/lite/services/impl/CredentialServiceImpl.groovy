@@ -4,7 +4,7 @@ import com.finerioconnect.lite.dtos.CreateCredentialDto
 import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.services.CredentialService
 import com.finerioconnect.lite.services.FinerioConnectApiService
-import com.finerioconnect.lite.services.UserApiDataService
+import com.finerioconnect.lite.services.UserApiDataGormService
 import com.finerioconnect.lite.services.UserGormService
 
 import io.micronaut.security.utils.SecurityService
@@ -22,7 +22,7 @@ class CredentialServiceImpl implements CredentialService {
   SecurityService securityService
 
   @Inject
-  UserApiDataService userApiDataService
+  UserApiDataGormService userApiDataGormService
 
   @Inject
   UserGormService userGormService
@@ -38,7 +38,7 @@ class CredentialServiceImpl implements CredentialService {
 
     def username = securityService.username().get()
     def user = userGormService.findByUsername( username )
-    def userApiData = userApiDataService.findByUser( user )
+    def userApiData = userApiDataGormService.findByUser( user )
     return finerioConnectApiService.createCredential( userApiData,
         createCredentialDto )
 

@@ -24,6 +24,16 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
       CreateCustomerDto createCustomerDto )
       throws Exception {
 
+    if ( userApiData == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.createCustomer.userApiData.null' )
+    }
+
+    if ( createCustomerDto == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.createCustomer.createCustomerDto.null' )
+    }
+
     return finerioConnectClient.createCustomer(
         getAuthorizationHeader( userApiData ), createCustomerDto.name )
 
@@ -32,6 +42,16 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
   @Override
   CredentialDto createCredential( UserApiData userApiData,
       CreateCredentialDto createCredentialDto ) throws Exception {
+
+    if ( userApiData == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.createCredential.userApiData.null' )
+    }
+
+    if ( createCredentialDto == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.createCredential.createCredentialDto.null' )
+    }
 
     return finerioConnectClient.createCredential(
         getAuthorizationHeader( userApiData ), createCredentialDto )

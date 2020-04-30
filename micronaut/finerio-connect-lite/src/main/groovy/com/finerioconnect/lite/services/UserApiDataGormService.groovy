@@ -2,9 +2,11 @@ package com.finerioconnect.lite.services
 
 import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.domain.UserApiData
+import grails.gorm.services.Service
 
-interface UserApiDataService {
+@Service(UserApiData)
+interface UserApiDataGormService {
 
-  UserApiData findByUser( User user ) throws Exception
+  UserApiData findByUser( User user )
 
 }

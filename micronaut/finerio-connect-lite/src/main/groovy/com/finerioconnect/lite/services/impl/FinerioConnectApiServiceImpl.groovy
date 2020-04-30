@@ -8,6 +8,7 @@ import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.dtos.LoginRequestDto
 import com.finerioconnect.lite.dtos.LoginResponseDto
 import com.finerioconnect.lite.httpclient.FinerioConnectClient
+import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.FinerioConnectApiService
 
 import javax.inject.Inject
@@ -20,6 +21,7 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
   FinerioConnectClient finerioConnectClient
 
   @Override
+  @Log
   CustomerDto createCustomer( UserApiData userApiData,
       CreateCustomerDto createCustomerDto )
       throws Exception {
@@ -40,6 +42,7 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
   }
   
   @Override
+  @Log
   CredentialDto createCredential( UserApiData userApiData,
       CreateCredentialDto createCredentialDto ) throws Exception {
 

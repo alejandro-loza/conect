@@ -27,7 +27,7 @@ interface FinerioConnectClient {
   @Post('/customers')
   CustomerDto createCustomer( @Header String authorization, String name )
 
-  @Post(value = '/credentials')
+  @Post('/credentials')
   CredentialDto createCredential( @Header String authorization,
       @Body CreateCredentialDto createCredentialDto )
 

@@ -51,8 +51,7 @@ class CallbackServiceCreateSpec extends Specification {
       callbackService.create( createCallbackDto )
     then:
       BadRequestException e = thrown()
-      e.message ==
-          'callbackService.create.alreadyExists'
+      e.message == 'callback.exists'
 
   }
 

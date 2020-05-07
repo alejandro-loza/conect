@@ -37,8 +37,7 @@ class CallbackServiceImpl implements CallbackService {
         user, nature )
 
     if ( previousInstance != null ) {
-      throw new BadRequestException(
-          'callbackService.create.alreadyExists' )
+      throw new BadRequestException( 'callback.exists' )
     }
 
     def callback = new Callback()
@@ -46,14 +45,21 @@ class CallbackServiceImpl implements CallbackService {
     callback.nature = nature
     callback.user = user
     def instance = callbackGormService.save( callback )
-    def callbackDto = new CallbackDto()
-    callbackDto.id = instance.id
-    callbackDto.url = instance.url
-    callbackDto.nature = instance.nature.toString()
-    callbackDto.dateCreated = instance.dateCreated
-    callbackDto.lastUpdated = instance.lastUpdated
-    return callbackDto
+    return generateCallbackDto( instance )
 
   }
   
+  private CallbackDto generateCallbackDto( Callback callback )
+      throws Exception {
+
+    def callbackDto = new CallbackDto()
+    callbackDto.id = callback.id
+    callbackDto.url = callback.url
+    callbackDto.nature = callback.nature.toString()
+    callbackDto.dateCreated = callback.dateCreated
+    callbackDto.lastUpdated = callback.lastUpdated
+    return callbackDto
+
+  }
+
 }

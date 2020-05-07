@@ -4,6 +4,7 @@ import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
+import com.finerioconnect.lite.exceptions.BadRequestException
 import com.finerioconnect.lite.services.impl.CallbackServiceImpl
 
 import spock.lang.Specification
@@ -29,10 +30,29 @@ class CallbackServiceCreateSpec extends Specification {
       createCallbackDto.nature = 'TRANSACTIONS'
     when:
       1 * userService.getCurrent() >> new User()
+      1 * callbackGormService.findByUserAndNature(
+          _ as User, _ as Callback.Nature ) >> null
       1 * callbackGormService.save( _ as Callback ) >> new Callback()
       def result = callbackService.create( createCallbackDto )
     then:
       result instanceof CallbackDto
+
+  }
+
+  def 'callback previously created'() {
+
+    given:
+      def createCallbackDto = new CreateCallbackDto()
+      createCallbackDto.nature = 'TRANSACTIONS'
+    when:
+      1 * userService.getCurrent() >> new User()
+      1 * callbackGormService.findByUserAndNature(
+          _ as User, _ as Callback.Nature ) >> new Callback()
+      callbackService.create( createCallbackDto )
+    then:
+      BadRequestException e = thrown()
+      e.message ==
+          'callbackService.create.alreadyExists'
 
   }
 

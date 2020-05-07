@@ -43,6 +43,11 @@ databaseChangeLog:
             type: DATETIME
             constraints:
               nullable: false
+        - column:
+            name: date_deleted
+            type: DATETIME
+            constraints:
+              nullable: true
 - changeSet:
     id: callback_user_fk
     author: alejandro.garcia

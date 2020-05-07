@@ -7,22 +7,19 @@ import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.CallbackGormService
 import com.finerioconnect.lite.services.CallbackService
-import com.finerioconnect.lite.services.UserGormService
+import com.finerioconnect.lite.services.UserService
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
-import io.micronaut.security.utils.SecurityService
-
+@Singleton
 class CallbackServiceImpl implements CallbackService {
 
   @Inject
   CallbackGormService callbackGormService
 
   @Inject
-  SecurityService securityService
-
-  @Inject
-  UserGormService userGormService
+  UserService userService
 
   @Log
   CallbackDto create( CreateCallbackDto createCallbackDto )
@@ -36,9 +33,7 @@ class CallbackServiceImpl implements CallbackService {
     def callback = new Callback()
     callback.url = createCallbackDto.url
     callback.nature = Nature.valueOf( createCallbackDto.nature )
-    def username = securityService.username().get()
-    def user = userGormService.findByUsername( username )
-    callback.user = user
+    callback.user = userService.getCurrent()
     def instance = callbackGormService.save( callback )
     def callbackDto = new CallbackDto()
     callbackDto.id = instance.id

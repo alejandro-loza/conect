@@ -9,9 +9,7 @@ import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.CredentialService
 import com.finerioconnect.lite.services.FinerioConnectApiService
 import com.finerioconnect.lite.services.UserApiDataGormService
-import com.finerioconnect.lite.services.UserGormService
-
-import io.micronaut.security.utils.SecurityService
+import com.finerioconnect.lite.services.UserService
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,13 +21,10 @@ class CredentialServiceImpl implements CredentialService {
   FinerioConnectApiService finerioConnectApiService
 
   @Inject
-  SecurityService securityService
-
-  @Inject
   UserApiDataGormService userApiDataGormService
 
   @Inject
-  UserGormService userGormService
+  UserService userService
 
   @Override
   @Log
@@ -50,11 +45,7 @@ class CredentialServiceImpl implements CredentialService {
   }
 
   private UserApiData getUserApiData() throws Exception {
-
-    def username = securityService.username().get()
-    def user = userGormService.findByUsername( username )
-    return userApiDataGormService.findByUser( user )
-
+    return userApiDataGormService.findByUser( userService.getCurrent() )
   }
 
   private CustomerDto getCustomerDto( UserApiData userApiData )

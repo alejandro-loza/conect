@@ -6,8 +6,6 @@ import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.services.impl.CallbackServiceImpl
 
-import io.micronaut.security.utils.SecurityService
-
 import spock.lang.Specification
 
 class CallbackServiceCreateSpec extends Specification {
@@ -15,14 +13,12 @@ class CallbackServiceCreateSpec extends Specification {
   def callbackService = new CallbackServiceImpl()
 
   def callbackGormService = Mock( CallbackGormService )
-  def securityService = Mock( SecurityService )
-  def userGormService = Mock( UserGormService )
+  def userService = Mock( UserService )
 
   def setup() {
 
     callbackService.callbackGormService = callbackGormService
-    callbackService.securityService = securityService
-    callbackService.userGormService = userGormService
+    callbackService.userService = userService
 
   }
 
@@ -32,8 +28,7 @@ class CallbackServiceCreateSpec extends Specification {
       def createCallbackDto = new CreateCallbackDto()
       createCallbackDto.nature = 'TRANSACTIONS'
     when:
-      1 * securityService.username() >> Optional.of( 'username' )
-      1 * userGormService.findByUsername( _ as String ) >> new User()
+      1 * userService.getCurrent() >> new User()
       1 * callbackGormService.save( _ as Callback ) >> new Callback()
       def result = callbackService.create( createCallbackDto )
     then:

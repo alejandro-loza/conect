@@ -1,7 +1,6 @@
 package com.finerioconnect.lite.domain
 
 import grails.gorm.annotation.Entity
-import io.micronaut.security.authentication.providers.UserState
 import org.grails.datastore.gorm.GormEntity
 
 @Entity 

@@ -2,6 +2,7 @@ package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.domain.Callback.Nature
+import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.exceptions.BadRequestException
@@ -48,6 +49,23 @@ class CallbackServiceImpl implements CallbackService {
 
   }
   
+  @Override
+  ApiListDto findAll() throws Exception {
+
+    def items = callbackGormService.findByUser( userService.getCurrent() )
+    def apiListDto = new ApiListDto()
+    def data = []
+
+    for ( item in items ) {
+      data << generateCallbackDto( item )
+    }
+
+    apiListDto.data = data
+    apiListDto.nextCursor = null
+    return apiListDto
+
+  }
+
   private Nature getNature( String rawNature ) throws Exception {
 
     try {

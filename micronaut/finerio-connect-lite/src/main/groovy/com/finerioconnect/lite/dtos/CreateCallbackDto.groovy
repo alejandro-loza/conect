@@ -8,12 +8,12 @@ import javax.validation.constraints.Size
 @ToString(includeNames = true, includePackage = false)
 class CreateCallbackDto {
 
-  @NotBlank
-  @Size(min = 1, max = 200)
+  @NotBlank( message = 'callback.url.blank')
+  @Size(min = 1, max = 200, message = 'callback.url.size.invalid')
   String url
 
-  @NotBlank
-  @Size(min = 1, max = 20)
+  @NotBlank( message = 'callback.nature.blank')
+  @Size(min = 1, max = 20, message = 'callback.nature.size.invalid')
   String nature
 
 }

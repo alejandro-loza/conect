@@ -1,7 +1,6 @@
 package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.User
-import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.UserGormService
 import com.finerioconnect.lite.services.UserService
 
@@ -19,7 +18,7 @@ class UserServiceImpl implements UserService {
   @Inject
   UserGormService userGormService
 
-  @Log
+  @Override
   User getCurrent() throws Exception {
 
     def username = securityService.username().get()

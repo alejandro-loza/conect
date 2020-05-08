@@ -68,4 +68,32 @@ class CallbackServiceCreateSpec extends Specification {
 
   }
 
+  def "parameter 'createCallbackDto.nature' is null"() {
+
+    given:
+      def createCallbackDto = new CreateCallbackDto()
+      createCallbackDto.nature = null
+    when:
+      1 * userService.getCurrent() >> new User()
+      callbackService.create( createCallbackDto )
+    then:
+      BadRequestException e = thrown()
+      e.message == 'callback.nature.invalid'
+
+  }
+
+  def "parameter 'createCallbackDto.nature' is invalid"() {
+
+    given:
+      def createCallbackDto = new CreateCallbackDto()
+      createCallbackDto.nature = 'INVALID_NATURE'
+    when:
+      1 * userService.getCurrent() >> new User()
+      callbackService.create( createCallbackDto )
+    then:
+      BadRequestException e = thrown()
+      e.message == 'callback.nature.invalid'
+
+  }
+
 }

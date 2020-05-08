@@ -3,8 +3,8 @@ package com.finerioconnect.lite.controllers
 import com.finerioconnect.lite.dtos.Error
 import com.finerioconnect.lite.dtos.Errors
 import com.finerioconnect.lite.exceptions.BadRequestException
+import com.finerioconnect.lite.services.MessageService
 
-import io.micronaut.context.MessageSource
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.server.exceptions.ExceptionHandler
@@ -17,25 +17,18 @@ class BadRequestExceptionHandler
     implements ExceptionHandler<BadRequestException, HttpResponse>{
 
   @Inject
-  MessageSource messageSource
+  MessageService messageService
 
   @Override
   HttpResponse handle( HttpRequest request, BadRequestException e ) {
 
     def error = new Error()
     error.code = e.message
-    error.title = getMessage( e.message )
-    error.detail = getMessage( "${e.message}.detail" )
+    error.title = messageService.getMessage( e.message )
+    error.detail = messageService.getMessage( "${e.message}.detail" )
     def errors = new Errors()
     errors.errors = [ error ]
     return HttpResponse.badRequest( errors )
-
-  }
-
-  private String getMessage( String key ) throws Exception {
-
-    def context = MessageSource.MessageContext.DEFAULT
-    return messageSource.getMessage( key, context, key )
 
   }
 

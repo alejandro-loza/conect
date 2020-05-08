@@ -5,7 +5,6 @@ import com.finerioconnect.lite.domain.Callback.Nature
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.exceptions.BadRequestException
-import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.CallbackGormService
 import com.finerioconnect.lite.services.CallbackService
 import com.finerioconnect.lite.services.UserService
@@ -22,7 +21,7 @@ class CallbackServiceImpl implements CallbackService {
   @Inject
   UserService userService
 
-  @Log
+  @Override
   CallbackDto create( CreateCallbackDto createCallbackDto )
       throws Exception {
 
@@ -32,7 +31,7 @@ class CallbackServiceImpl implements CallbackService {
     }
 
     def user = userService.getCurrent()
-    def nature = Nature.valueOf( createCallbackDto.nature )
+    def nature = getNature( createCallbackDto.nature )
     def previousInstance = callbackGormService.findByUserAndNature(
         user, nature )
 
@@ -49,6 +48,16 @@ class CallbackServiceImpl implements CallbackService {
 
   }
   
+  private Nature getNature( String rawNature ) throws Exception {
+
+    try {
+      return Nature.valueOf( rawNature )
+    } catch ( Exception e ) {
+      throw new BadRequestException( 'callback.nature.invalid' )
+    }
+
+  }
+
   private CallbackDto generateCallbackDto( Callback callback )
       throws Exception {
 

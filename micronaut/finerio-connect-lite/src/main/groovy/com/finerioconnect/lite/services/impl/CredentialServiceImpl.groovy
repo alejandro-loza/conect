@@ -5,7 +5,6 @@ import com.finerioconnect.lite.dtos.CreateCredentialDto
 import com.finerioconnect.lite.dtos.CreateCustomerDto
 import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
-import com.finerioconnect.lite.logging.Log
 import com.finerioconnect.lite.services.CredentialService
 import com.finerioconnect.lite.services.FinerioConnectApiService
 import com.finerioconnect.lite.services.UserApiDataGormService
@@ -27,7 +26,6 @@ class CredentialServiceImpl implements CredentialService {
   UserService userService
 
   @Override
-  @Log
   CredentialDto create( CreateCredentialDto createCredentialDto )
       throws Exception {
 

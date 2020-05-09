@@ -12,6 +12,7 @@ import javax.validation.Valid
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
@@ -37,16 +38,24 @@ class CallbackController {
   }
 
   @Get('/callbacks/{id}')
-  public HttpResponse<ApiListDto> findAll( @PathVariable Long id ) {
+  public HttpResponse<ApiListDto> findOne( @PathVariable Long id ) {
     return HttpResponse.ok( callbackService.findOne( id ) )
   }
 
   @Put('/callbacks/{id}')
-  public HttpResponse<ApiListDto> findAll( @PathVariable Long id,
+  public HttpResponse<CallbackDto> update( @PathVariable Long id,
       @Valid @Body UpdateCallbackDto updateCallbackDto ) {
 
     return HttpResponse.ok( callbackService.update(
         id, updateCallbackDto ) )
+
+  }
+
+  @Delete('/callbacks/{id}')
+  public HttpResponse delete( @PathVariable Long id ) {
+
+    callbackService.delete( id )
+    return HttpResponse.noContent()
 
   }
 

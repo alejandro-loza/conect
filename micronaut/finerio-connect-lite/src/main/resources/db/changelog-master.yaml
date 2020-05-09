@@ -7,3 +7,5 @@ databaseChangeLog:
     file: db/user_role.yaml
 - include:
     file: db/user_api_data.yaml
+- include:
+    file: db/callback.yaml

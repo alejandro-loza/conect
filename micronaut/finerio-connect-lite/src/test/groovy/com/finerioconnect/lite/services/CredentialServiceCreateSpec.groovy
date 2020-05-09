@@ -8,8 +8,6 @@ import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.services.impl.CredentialServiceImpl
 
-import io.micronaut.security.utils.SecurityService
-
 import spock.lang.Specification
 
 class CredentialServiceCreateSpec extends Specification {
@@ -17,16 +15,14 @@ class CredentialServiceCreateSpec extends Specification {
   def credentialService = new CredentialServiceImpl()
 
   def finerioConnectApiService = Mock( FinerioConnectApiService )
-  def securityService = Mock( SecurityService )
   def userApiDataGormService = Mock( UserApiDataGormService )
-  def userGormService = Mock( UserGormService )
+  def userService = Mock( UserService )
 
   def setup() {
 
     credentialService.finerioConnectApiService = finerioConnectApiService
-    credentialService.securityService = securityService
     credentialService.userApiDataGormService = userApiDataGormService
-    credentialService.userGormService = userGormService
+    credentialService.userService = userService
 
   }
 
@@ -43,8 +39,7 @@ class CredentialServiceCreateSpec extends Specification {
     when:
       def result = credentialService.create( createCredentialDto )
     then:
-      1 * securityService.username() >> Optional.of( 'username' )
-      1 * userGormService.findByUsername( _ as String ) >> new User()
+      1 * userService.getCurrent() >> new User()
       1 * userApiDataGormService.findByUser( _ as User ) >>
           new UserApiData()
       1 * finerioConnectApiService.createCustomer( _ as UserApiData,

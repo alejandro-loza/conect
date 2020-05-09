@@ -3,12 +3,13 @@ package com.finerioconnect.lite.services
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.dtos.CallbackDto
+import com.finerioconnect.lite.dtos.UpdateCallbackDto
 import com.finerioconnect.lite.exceptions.ItemNotFoundException
 import com.finerioconnect.lite.services.impl.CallbackServiceImpl
 
 import spock.lang.Specification
 
-class CallbackServiceFindOneSpec extends Specification {
+class CallbackServiceUpdateSpec extends Specification {
 
   def callbackService = new CallbackServiceImpl()
 
@@ -25,14 +26,19 @@ class CallbackServiceFindOneSpec extends Specification {
   def 'method worked successfully'() {
 
     given:
+      def newUrl = 'newUrl'
       def id = 1L
+      def updateCallbackDto = new UpdateCallbackDto( url: newUrl )
     when:
       1 * userService.getCurrent() >> new User()
       1 * callbackGormService.get( _ as Long ) >>
           new Callback( user: new User() )
-      def result = callbackService.findOne( id )
+      1 * callbackGormService.save( _ as Callback ) >>
+          new Callback( url: newUrl )
+      def result = callbackService.update( id, updateCallbackDto )
     then:
       result instanceof CallbackDto
+      result.url == newUrl
 
   }
 
@@ -40,9 +46,10 @@ class CallbackServiceFindOneSpec extends Specification {
 
     given:
       def id = 1L
+      def updateCallbackDto = new UpdateCallbackDto()
     when:
       1 * callbackGormService.get( _ as Long ) >> null
-      def result = callbackService.findOne( id )
+      def result = callbackService.update( id, updateCallbackDto )
     then:
       ItemNotFoundException e = thrown()
       e.message == 'callback.not.found'
@@ -53,11 +60,12 @@ class CallbackServiceFindOneSpec extends Specification {
 
     given:
       def id = 1L
+      def updateCallbackDto = new UpdateCallbackDto()
     when:
       1 * userService.getCurrent() >> new User( id: 1L )
       1 * callbackGormService.get( _ as Long ) >>
           new Callback( user: new User( id: 2L ) )
-      def result = callbackService.findOne( id )
+      def result = callbackService.update( id, updateCallbackDto )
     then:
       ItemNotFoundException e = thrown()
       e.message == 'callback.not.found'
@@ -68,11 +76,25 @@ class CallbackServiceFindOneSpec extends Specification {
 
     given:
       def id = null
+      def updateCallbackDto = new UpdateCallbackDto()
     when:
-      callbackService.findOne( id )
+      callbackService.update( id, updateCallbackDto )
     then:
       IllegalArgumentException e = thrown()
-      e.message == 'callbackService.findOne.id.null'
+      e.message == 'callbackService.update.id.null'
+
+  }
+
+  def "parameter 'updateCallbackDto' is null"() {
+
+    given:
+      def id = 1L
+      def updateCallbackDto = null
+    when:
+      callbackService.update( id, updateCallbackDto )
+    then:
+      IllegalArgumentException e = thrown()
+      e.message == 'callbackService.update.updateCallbackDto.null'
 
   }
 

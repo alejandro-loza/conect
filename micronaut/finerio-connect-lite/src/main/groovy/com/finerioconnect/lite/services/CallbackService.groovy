@@ -3,6 +3,7 @@ package com.finerioconnect.lite.services
 import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
+import com.finerioconnect.lite.dtos.UpdateCallbackDto
 import com.finerioconnect.lite.logging.Log
 
 interface CallbackService {
@@ -15,5 +16,9 @@ interface CallbackService {
 
   @Log
   CallbackDto findOne( Long id ) throws Exception
+
+  @Log
+  CallbackDto update( Long id, UpdateCallbackDto updateCallbackDto )
+      throws Exception
 
 }

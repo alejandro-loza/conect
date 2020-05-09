@@ -5,6 +5,7 @@ import com.finerioconnect.lite.domain.Callback.Nature
 import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
+import com.finerioconnect.lite.dtos.UpdateCallbackDto
 import com.finerioconnect.lite.exceptions.BadRequestException
 import com.finerioconnect.lite.exceptions.ItemNotFoundException
 import com.finerioconnect.lite.services.CallbackGormService
@@ -81,14 +82,28 @@ class CallbackServiceImpl implements CallbackService {
           'callbackService.findOne.id.null' )
     }
 
-    def callback = callbackGormService.get( id )
+    return generateCallbackDto( findInstance( id ) )
 
-    if ( callback == null ||
-        callback.user.id != userService.getCurrent().id ) {
-      throw new ItemNotFoundException( 'callback.not.found' )
+  }
+
+  @Override
+  @Transactional
+  CallbackDto update( Long id, UpdateCallbackDto updateCallbackDto )
+      throws Exception {
+
+    if ( id == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.update.id.null' )
     }
 
-    return generateCallbackDto( callback )
+    if ( updateCallbackDto == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.update.updateCallbackDto.null' )
+    }
+
+    def instance = findInstance( id )
+    instance.url = updateCallbackDto.url
+    return generateCallbackDto( callbackGormService.save( instance ) )
 
   }
 
@@ -113,6 +128,19 @@ class CallbackServiceImpl implements CallbackService {
     callbackDto.dateCreated = callback.dateCreated
     callbackDto.lastUpdated = callback.lastUpdated
     return callbackDto
+
+  }
+
+  private Callback findInstance( Long id ) throws Exception {
+
+    def callback = callbackGormService.get( id )
+
+    if ( callback == null ||
+        callback.user.id != userService.getCurrent().id ) {
+      throw new ItemNotFoundException( 'callback.not.found' )
+    }
+
+    return callback
 
   }
 

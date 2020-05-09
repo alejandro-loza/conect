@@ -12,7 +12,7 @@ interface CallbackGormService {
 
   Callback findByUserAndNature( User user, Nature nature )
 
-  List<Callback> findByUser( User user )
+  List<Callback> findByUser( User user, Map args )
 
   Callback get( Serializable id )
 

@@ -57,7 +57,8 @@ class CallbackServiceImpl implements CallbackService {
   @Transactional(readOnly = true)
   ApiListDto findAll() throws Exception {
 
-    def items = callbackGormService.findByUser( userService.getCurrent() )
+    def items = callbackGormService.findByUser( userService.getCurrent(),
+        [ sort: 'id', order: 'desc' ] )
     def apiListDto = new ApiListDto()
     def data = []
 

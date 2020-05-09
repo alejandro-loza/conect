@@ -9,7 +9,11 @@ import grails.gorm.services.Service
 interface CallbackGormService {
 
   Callback save( Callback callback )
+
   Callback findByUserAndNature( User user, Nature nature )
+
   List<Callback> findByUser( User user )
+
+  Callback get( Serializable id )
 
 }

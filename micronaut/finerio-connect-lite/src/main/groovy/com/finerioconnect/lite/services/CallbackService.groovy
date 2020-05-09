@@ -13,4 +13,7 @@ interface CallbackService {
   @Log
   ApiListDto findAll() throws Exception
 
+  @Log
+  CallbackDto findOne( Long id ) throws Exception
+
 }

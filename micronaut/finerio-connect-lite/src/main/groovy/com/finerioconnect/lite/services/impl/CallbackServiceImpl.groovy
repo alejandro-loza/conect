@@ -66,6 +66,24 @@ class CallbackServiceImpl implements CallbackService {
 
   }
 
+  @Override
+  CallbackDto findOne( Long id ) throws Exception {
+
+    if ( id == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.findOne.id.null' )
+    }
+
+    def callback = callbackGormService.get( id )
+
+    if ( callback?.user != userService.getCurrent() ) {
+      return null
+    }
+
+    return generateCallbackDto( callback )
+
+  }
+
   private Nature getNature( String rawNature ) throws Exception {
 
     try {
@@ -79,6 +97,7 @@ class CallbackServiceImpl implements CallbackService {
   private CallbackDto generateCallbackDto( Callback callback )
       throws Exception {
 
+    if ( callback == null ) { return null }
     def callbackDto = new CallbackDto()
     callbackDto.id = callback.id
     callbackDto.url = callback.url

@@ -38,7 +38,8 @@ class CallbackServiceImpl implements CallbackService {
 
     def user = userService.getCurrent()
     def nature = getNature( createCallbackDto.nature )
-    def previousInstance = callbackGormService.findByUserAndNature(
+    def previousInstance =
+        callbackGormService.findByUserAndNatureAndDateDeletedIsNull(
         user, nature )
 
     if ( previousInstance != null ) {
@@ -58,8 +59,8 @@ class CallbackServiceImpl implements CallbackService {
   @Transactional(readOnly = true)
   ApiListDto findAll() throws Exception {
 
-    def items = callbackGormService.findByUser( userService.getCurrent(),
-        [ sort: 'id', order: 'desc' ] )
+    def items = callbackGormService.findByUserAndDateDeletedIsNull(
+        userService.getCurrent(), [ sort: 'id', order: 'desc' ] )
     def apiListDto = new ApiListDto()
     def data = []
 
@@ -150,7 +151,7 @@ class CallbackServiceImpl implements CallbackService {
 
     def callback = callbackGormService.get( id )
 
-    if ( callback == null ||
+    if ( callback == null || callback.dateDeleted != null ||
         callback.user.id != userService.getCurrent().id ) {
       throw new ItemNotFoundException( 'callback.not.found' )
     }

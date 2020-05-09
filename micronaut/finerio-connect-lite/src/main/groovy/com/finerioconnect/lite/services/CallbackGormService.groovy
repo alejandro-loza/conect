@@ -10,9 +10,10 @@ interface CallbackGormService {
 
   Callback save( Callback callback )
 
-  Callback findByUserAndNature( User user, Nature nature )
+  Callback findByUserAndNatureAndDateDeletedIsNull(
+      User user, Nature nature )
 
-  List<Callback> findByUser( User user, Map args )
+  List<Callback> findByUserAndDateDeletedIsNull( User user, Map args )
 
   Callback get( Serializable id )
 

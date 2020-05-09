@@ -27,7 +27,8 @@ class CallbackServiceFindAllSpec extends Specification {
 
     when:
       1 * userService.getCurrent() >> new User()
-      1 * callbackGormService.findByUser( _ as User, _ as Map ) >>
+      1 * callbackGormService.findByUserAndDateDeletedIsNull(
+          _ as User, _ as Map ) >>
           [ new Callback(), new Callback() ]
       def result = callbackService.findAll()
     then:

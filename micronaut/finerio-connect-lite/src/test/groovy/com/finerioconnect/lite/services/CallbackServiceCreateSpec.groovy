@@ -30,7 +30,7 @@ class CallbackServiceCreateSpec extends Specification {
       createCallbackDto.nature = 'TRANSACTIONS'
     when:
       1 * userService.getCurrent() >> new User()
-      1 * callbackGormService.findByUserAndNature(
+      1 * callbackGormService.findByUserAndNatureAndDateDeletedIsNull(
           _ as User, _ as Callback.Nature ) >> null
       1 * callbackGormService.save( _ as Callback ) >> new Callback()
       def result = callbackService.create( createCallbackDto )
@@ -46,7 +46,7 @@ class CallbackServiceCreateSpec extends Specification {
       createCallbackDto.nature = 'TRANSACTIONS'
     when:
       1 * userService.getCurrent() >> new User()
-      1 * callbackGormService.findByUserAndNature(
+      1 * callbackGormService.findByUserAndNatureAndDateDeletedIsNull(
           _ as User, _ as Callback.Nature ) >> new Callback()
       callbackService.create( createCallbackDto )
     then:

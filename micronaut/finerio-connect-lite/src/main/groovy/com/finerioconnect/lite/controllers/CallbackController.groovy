@@ -12,6 +12,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.security.annotation.Secured
 
@@ -34,6 +35,11 @@ class CallbackController {
   @Get('/callbacks')
   public HttpResponse<ApiListDto> findAll() {
     return HttpResponse.ok( callbackService.findAll() )
+  }
+
+  @Get('/callbacks/{id}')
+  public HttpResponse<ApiListDto> findAll( @PathVariable Long id ) {
+    return HttpResponse.ok( callbackService.findOne( id ) )
   }
 
 }

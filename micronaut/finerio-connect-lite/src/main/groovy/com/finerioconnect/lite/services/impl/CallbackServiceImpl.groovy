@@ -6,9 +6,12 @@ import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.exceptions.BadRequestException
+import com.finerioconnect.lite.exceptions.ItemNotFoundException
 import com.finerioconnect.lite.services.CallbackGormService
 import com.finerioconnect.lite.services.CallbackService
 import com.finerioconnect.lite.services.UserService
+
+import io.micronaut.spring.tx.annotation.Transactional
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,6 +26,7 @@ class CallbackServiceImpl implements CallbackService {
   UserService userService
 
   @Override
+  @Transactional
   CallbackDto create( CreateCallbackDto createCallbackDto )
       throws Exception {
 
@@ -50,6 +54,7 @@ class CallbackServiceImpl implements CallbackService {
   }
   
   @Override
+  @Transactional(readOnly = true)
   ApiListDto findAll() throws Exception {
 
     def items = callbackGormService.findByUser( userService.getCurrent() )
@@ -67,6 +72,7 @@ class CallbackServiceImpl implements CallbackService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   CallbackDto findOne( Long id ) throws Exception {
 
     if ( id == null ) {
@@ -76,8 +82,9 @@ class CallbackServiceImpl implements CallbackService {
 
     def callback = callbackGormService.get( id )
 
-    if ( callback?.user != userService.getCurrent() ) {
-      return null
+    if ( callback == null ||
+        callback.user.id != userService.getCurrent().id ) {
+      throw new ItemNotFoundException( 'callback.not.found' )
     }
 
     return generateCallbackDto( callback )

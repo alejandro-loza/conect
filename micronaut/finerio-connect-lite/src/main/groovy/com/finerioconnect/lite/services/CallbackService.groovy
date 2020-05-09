@@ -21,4 +21,7 @@ interface CallbackService {
   CallbackDto update( Long id, UpdateCallbackDto updateCallbackDto )
       throws Exception
 
+  @Log
+  void delete( Long id ) throws Exception
+
 }

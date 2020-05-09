@@ -107,6 +107,21 @@ class CallbackServiceImpl implements CallbackService {
 
   }
 
+  @Override
+  @Transactional
+  void delete( Long id ) throws Exception {
+
+    if ( id == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.delete.id.null' )
+    }
+
+    def instance = findInstance( id )
+    instance.dateDeleted = new Date()
+    callbackGormService.save( instance )
+
+  }
+
   private Nature getNature( String rawNature ) throws Exception {
 
     try {

@@ -3,6 +3,7 @@ package com.finerioconnect.lite.controllers
 import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
 import com.finerioconnect.lite.dtos.CallbackDto
+import com.finerioconnect.lite.dtos.UpdateCallbackDto
 import com.finerioconnect.lite.services.CallbackService
 
 import javax.inject.Inject
@@ -14,6 +15,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.security.annotation.Secured
 
 @Controller
@@ -26,10 +28,7 @@ class CallbackController {
   @Post('/callbacks')
   public HttpResponse<CallbackDto> create(
       @Valid @Body CreateCallbackDto createCallbackDto ) {
-
-    return HttpResponse.ok( callbackService.create(
-        createCallbackDto ) ) 
-
+    return HttpResponse.ok( callbackService.create( createCallbackDto ) ) 
   }
 
   @Get('/callbacks')
@@ -40,6 +39,15 @@ class CallbackController {
   @Get('/callbacks/{id}')
   public HttpResponse<ApiListDto> findAll( @PathVariable Long id ) {
     return HttpResponse.ok( callbackService.findOne( id ) )
+  }
+
+  @Put('/callbacks/{id}')
+  public HttpResponse<ApiListDto> findAll( @PathVariable Long id,
+      @Valid @Body UpdateCallbackDto updateCallbackDto ) {
+
+    return HttpResponse.ok( callbackService.update(
+        id, updateCallbackDto ) )
+
   }
 
 }

@@ -1,4 +1,4 @@
-package com.finerioconnect.lite.controllers
+package com.finerioconnect.lite.controller.handlers
 
 import com.finerioconnect.lite.dtos.Error
 import com.finerioconnect.lite.dtos.Errors

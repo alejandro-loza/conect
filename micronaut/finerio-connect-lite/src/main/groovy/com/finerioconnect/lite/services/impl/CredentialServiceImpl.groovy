@@ -1,10 +1,13 @@
 package com.finerioconnect.lite.services.impl
 
+import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.domain.UserApiData
 import com.finerioconnect.lite.dtos.CreateCredentialDto
+import com.finerioconnect.lite.dtos.CreateCredentialConnectionDto
 import com.finerioconnect.lite.dtos.CreateCustomerDto
 import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
+import com.finerioconnect.lite.services.CredentialConnectionService
 import com.finerioconnect.lite.services.CredentialService
 import com.finerioconnect.lite.services.FinerioConnectApiService
 import com.finerioconnect.lite.services.UserApiDataGormService
@@ -15,6 +18,9 @@ import javax.inject.Singleton
 
 @Singleton
 class CredentialServiceImpl implements CredentialService {
+
+  @Inject
+  CredentialConnectionService credentialConnectionService
 
   @Inject
   FinerioConnectApiService finerioConnectApiService
@@ -34,16 +40,15 @@ class CredentialServiceImpl implements CredentialService {
           'credentialService.create.createCredentialDto.null' )
     }
 
-    def userApiData = getUserApiData()
+    def currentUser = userService.getCurrent()
+    def userApiData = userApiDataGormService.findByUser( currentUser )
     def customerDto = getCustomerDto( userApiData )
     createCredentialDto.customerId = customerDto.id
-    return finerioConnectApiService.createCredential( userApiData,
-        createCredentialDto )
+    def credentialDto = finerioConnectApiService.createCredential(
+        userApiData, createCredentialDto )
+    createCredentialConnection( currentUser, credentialDto.id )
+    return credentialDto
 
-  }
-
-  private UserApiData getUserApiData() throws Exception {
-    return userApiDataGormService.findByUser( userService.getCurrent() )
   }
 
   private CustomerDto getCustomerDto( UserApiData userApiData )
@@ -53,6 +58,16 @@ class CredentialServiceImpl implements CredentialService {
     createCustomerDto.name = UUID.randomUUID().toString()
     return finerioConnectApiService.createCustomer( userApiData,
         createCustomerDto )
+
+  }
+
+  private void createCredentialConnection( User currentUser,
+      String credentialId ) throws Exception {
+
+    def createCredentialConnectionDto = new CreateCredentialConnectionDto()
+    createCredentialConnectionDto.user = currentUser
+    createCredentialConnectionDto.credentialId = credentialId
+    credentialConnectionService.create( createCredentialConnectionDto )
 
   }
 

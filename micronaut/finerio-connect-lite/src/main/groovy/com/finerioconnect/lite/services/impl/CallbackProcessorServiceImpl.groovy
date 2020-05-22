@@ -1,6 +1,7 @@
 package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.Callback
+import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
 import com.finerioconnect.lite.services.CallbackProcessorService
@@ -41,6 +42,15 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
   }
 
+  @Override
+  void processFailure( FailureCallbackDto failureCallbackDto )
+      throws Exception {
+
+    processCallback( failureCallbackDto, 'processFailure',
+        'failureCallbackDto', Callback.Nature.FAILURE )
+
+  }
+  
   private void processCallback( SuccessCallbackDto successCallbackDto,
       String method, String dtoName, Callback.Nature nature )
       throws Exception {

@@ -1,5 +1,6 @@
 package com.finerioconnect.lite.services
 
+import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
 import com.finerioconnect.lite.logging.Log
@@ -11,6 +12,10 @@ interface CallbackProcessorService {
   
   @Log
   void processSuccess( SuccessCallbackDto successCallbackDto )
+      throws Exception
+  
+  @Log
+  void processFailure( FailureCallbackDto failureCallbackDto )
       throws Exception
   
 }

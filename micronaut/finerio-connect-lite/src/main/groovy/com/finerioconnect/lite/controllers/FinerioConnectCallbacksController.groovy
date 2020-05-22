@@ -1,5 +1,6 @@
 package com.finerioconnect.lite.controllers
 
+import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
 import com.finerioconnect.lite.services.CallbackProcessorService
@@ -36,6 +37,15 @@ class FinerioConnectCallbacksController {
       @Body SuccessCallbackDto successCallbackDto ) {
 
     callbackProcessorService.processSuccess( successCallbackDto )
+    return HttpStatus.OK
+
+  }
+
+  @Post('/B9tVrjPA5qbE8KH8RsjPru3DPJHR7AbncrNaNJ3FDj5mu8nLXp')
+  public HttpStatus processFailure(
+      @Body FailureCallbackDto failureCallbackDto ) {
+
+    callbackProcessorService.processFailure( failureCallbackDto )
     return HttpStatus.OK
 
   }

@@ -2,6 +2,7 @@ package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
+import com.finerioconnect.lite.dtos.SuccessCallbackDto
 import com.finerioconnect.lite.services.CallbackProcessorService
 import com.finerioconnect.lite.services.CallbackRestService
 import com.finerioconnect.lite.services.CallbackService
@@ -26,31 +27,49 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
   void processNotify( NotifyCallbackDto notifyCallbackDto )
       throws Exception {
 
-    if ( notifyCallbackDto == null ) {
+    processCallback( notifyCallbackDto, 'processNotify',
+        'notifyCallbackDto', Callback.Nature.NOTIFY )
+
+  }
+  
+  @Override
+  void processSuccess( SuccessCallbackDto successCallbackDto )
+      throws Exception {
+
+    processCallback( successCallbackDto, 'processSuccess',
+        'successCallbackDto', Callback.Nature.SUCCESS )
+
+  }
+
+  private void processCallback( SuccessCallbackDto successCallbackDto,
+      String method, String dtoName, Callback.Nature nature )
+      throws Exception {
+
+    if ( successCallbackDto == null ) {
       throw new IllegalArgumentException(
-          'callbackProcessorService.processNotify.notifyCallbackDto.null' )
+          "callbackProcessorService.${method}.${dtoName}.null" )
     }
 
     def credentialConnectionDto =
         credentialConnectionService.findByCredentialId(
-            notifyCallbackDto.credentialId )
+        successCallbackDto.credentialId )
 
     if ( credentialConnectionDto == null ) {
       throw new IllegalArgumentException(
-          'callbackProcessorService.processNotify' +
+          "callbackProcessorService.${method}" +
           '.credentialConnectionDto.not.found' )
     }
 
     def callbackDto = callbackService.findByUserIdAndNature(
-        credentialConnectionDto.userId, Callback.Nature.NOTIFY )
+        credentialConnectionDto.userId, nature )
 
     if ( callbackDto == null ) {
       throw new IllegalArgumentException(
-          'callbackProcessorService.processNotify.callbackDto.not.found' )
+          "callbackProcessorService.${method}.callbackDto.not.found" )
     }
 
-    callbackRestService.post( callbackDto.url, notifyCallbackDto )
+    callbackRestService.post( callbackDto.url, successCallbackDto )
 
   }
-  
+
 }

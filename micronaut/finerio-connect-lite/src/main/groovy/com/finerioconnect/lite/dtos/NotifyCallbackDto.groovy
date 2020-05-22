@@ -2,10 +2,10 @@ package com.finerioconnect.lite.dtos
 
 import groovy.transform.ToString
 
-@ToString(includeNames = true, includePackage = false)
-class NotifyCallbackDto {
+@ToString(includeNames = true, includePackage = false,
+    includeSuperProperties = true)
+class NotifyCallbackDto extends SuccessCallbackDto {
 
-  String credentialId
   String stage
 
 }

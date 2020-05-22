@@ -11,4 +11,8 @@ interface CredentialConnectionService {
       CreateCredentialConnectionDto createCredentialConnectionDto )
       throws Exception
 
+  @Log
+  CredentialConnectionDto findByCredentialId( String credentialId )
+      throws Exception
+
 }

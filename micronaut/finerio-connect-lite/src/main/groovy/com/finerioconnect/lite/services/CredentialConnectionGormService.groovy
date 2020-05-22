@@ -8,4 +8,6 @@ interface CredentialConnectionGormService {
 
   CredentialConnection save( CredentialConnection credentialConnection )
 
+  CredentialConnection findByCredentialId( String credentialId )
+
 }

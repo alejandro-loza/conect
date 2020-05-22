@@ -39,4 +39,26 @@ class CredentialConnectionServiceImpl
 
   }
 
+  @Override
+  CredentialConnectionDto findByCredentialId( String credentialId )
+      throws Exception {
+
+    if ( credentialId == null ) {
+      throw new IllegalArgumentException(
+          'credentialConnectionService.findByCredentialId' +
+          '.credentialId.null' )
+    }
+
+    def credentialConnection =
+        credentialConnectionGormService.findByCredentialId( credentialId )
+    if ( credentialConnection == null ) { return null }
+    def credentialConnectionDto = new CredentialConnectionDto()
+    credentialConnectionDto.id = credentialConnection.id
+    credentialConnectionDto.userId = credentialConnection.user.id
+    credentialConnectionDto.credentialId = credentialConnection.credentialId
+    return credentialConnectionDto
+
+
+  }
+
 }

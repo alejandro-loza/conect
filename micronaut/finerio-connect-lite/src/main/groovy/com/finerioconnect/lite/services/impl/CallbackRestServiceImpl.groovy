@@ -13,8 +13,11 @@ class CallbackRestServiceImpl implements CallbackRestService {
   @Override
   void post( String url, Object body ) throws Exception {
 
-    HttpClient.create( new URL( url ) ).retrieve(
-        HttpRequest.POST( url, body ) )
+    def httpClient = HttpClient.create( new URL( url ) )
+
+    try {
+      httpClient.toBlocking().retrieve( HttpRequest.POST( url, body ) )
+    } catch ( Exception e ) {}
 
   }
   

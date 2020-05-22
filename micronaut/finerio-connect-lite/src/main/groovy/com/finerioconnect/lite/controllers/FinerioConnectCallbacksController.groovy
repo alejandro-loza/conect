@@ -1,6 +1,7 @@
 package com.finerioconnect.lite.controllers
 
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
+import com.finerioconnect.lite.dtos.SuccessCallbackDto
 import com.finerioconnect.lite.services.CallbackProcessorService
 
 import javax.annotation.security.PermitAll
@@ -26,6 +27,15 @@ class FinerioConnectCallbacksController {
       @Body NotifyCallbackDto notifyCallbackDto ) {
 
     callbackProcessorService.processNotify( notifyCallbackDto )
+    return HttpStatus.OK
+
+  }
+
+  @Post('/3dr5bJ72fDZ8syMNkSPMzF3eMUZ3fQ7N6EVvkczJbpLT4rBUQg')
+  public HttpStatus processSuccess(
+      @Body SuccessCallbackDto successCallbackDto ) {
+
+    callbackProcessorService.processSuccess( successCallbackDto )
     return HttpStatus.OK
 
   }

@@ -6,6 +6,8 @@ import com.finerioconnect.lite.dtos.CredentialConnectionDto
 import com.finerioconnect.lite.services.CredentialConnectionGormService
 import com.finerioconnect.lite.services.CredentialConnectionService
 
+import io.micronaut.spring.tx.annotation.Transactional
+
 import javax.inject.Inject
 
 class CredentialConnectionServiceImpl
@@ -15,6 +17,7 @@ class CredentialConnectionServiceImpl
   CredentialConnectionGormService credentialConnectionGormService
 
   @Override
+  @Transactional
   CredentialConnectionDto create(
       CreateCredentialConnectionDto createCredentialConnectionDto )
       throws Exception {
@@ -40,6 +43,7 @@ class CredentialConnectionServiceImpl
   }
 
   @Override
+  @Transactional(readOnly = true)
   CredentialConnectionDto findByCredentialId( String credentialId )
       throws Exception {
 

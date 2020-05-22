@@ -39,8 +39,7 @@ class CallbackProcessorServiceProcessNotifySpec extends Specification {
           new CredentialConnectionDto( userId: 1L )
       1 * callbackService.findByUserIdAndNature( _ as Long,
           _ as Callback.Nature ) >> new CallbackDto( url: 'url' )
-      1 * callbackRestService.post( _ as String, _ as Object ) >>
-          'myResponse'
+      1 * callbackRestService.post( _ as String, _ as Object )
       true
 
   }

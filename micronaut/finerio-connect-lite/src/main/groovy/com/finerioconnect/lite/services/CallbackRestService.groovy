@@ -5,6 +5,6 @@ import com.finerioconnect.lite.logging.Log
 interface CallbackRestService {
 
   @Log
-  String post( String url, Object body ) throws Exception
+  void post( String url, Object body ) throws Exception
   
 }

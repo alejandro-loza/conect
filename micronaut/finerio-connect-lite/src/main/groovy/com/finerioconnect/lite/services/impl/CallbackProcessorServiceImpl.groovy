@@ -13,13 +13,13 @@ import javax.inject.Singleton
 @Singleton
 class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
-  @Singleton
+  @Inject
   CallbackRestService callbackRestService
 
-  @Singleton
+  @Inject
   CallbackService callbackService
 
-  @Singleton
+  @Inject
   CredentialConnectionService credentialConnectionService
 
   @Override

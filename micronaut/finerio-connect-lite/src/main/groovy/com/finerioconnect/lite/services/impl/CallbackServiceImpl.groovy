@@ -123,6 +123,35 @@ class CallbackServiceImpl implements CallbackService {
 
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  CallbackDto findByUserIdAndNature( Long userId, Callback.Nature nature )
+      throws Exception {
+
+    if ( userId == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.findByUserIdAndNature.userId.null' )
+    }
+
+    if ( nature == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.findByUserIdAndNature.nature.null' )
+    }
+
+    def user = userService.findOne( userId )
+
+    if ( user == null ) {
+      throw new IllegalArgumentException(
+          'callbackService.findByUserIdAndNature.user.not.found' )
+    }
+
+    def callback = callbackGormService.
+        findByUserAndNatureAndDateDeletedIsNull( user, nature )
+    if ( callback == null ) { return null }
+    return generateCallbackDto( callback )
+
+  }
+
   private Nature getNature( String rawNature ) throws Exception {
 
     try {

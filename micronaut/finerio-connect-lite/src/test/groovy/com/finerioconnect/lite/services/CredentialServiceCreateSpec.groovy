@@ -2,8 +2,10 @@ package com.finerioconnect.lite.services
 
 import com.finerioconnect.lite.domain.User
 import com.finerioconnect.lite.domain.UserApiData
+import com.finerioconnect.lite.dtos.CreateCredentialConnectionDto
 import com.finerioconnect.lite.dtos.CreateCredentialDto
 import com.finerioconnect.lite.dtos.CreateCustomerDto
+import com.finerioconnect.lite.dtos.CredentialConnectionDto
 import com.finerioconnect.lite.dtos.CredentialDto
 import com.finerioconnect.lite.dtos.CustomerDto
 import com.finerioconnect.lite.services.impl.CredentialServiceImpl
@@ -14,12 +16,15 @@ class CredentialServiceCreateSpec extends Specification {
 
   def credentialService = new CredentialServiceImpl()
 
+  def credentialConnectionService = Mock( CredentialConnectionService )
   def finerioConnectApiService = Mock( FinerioConnectApiService )
   def userApiDataGormService = Mock( UserApiDataGormService )
   def userService = Mock( UserService )
 
   def setup() {
 
+    credentialService.credentialConnectionService =
+        credentialConnectionService
     credentialService.finerioConnectApiService = finerioConnectApiService
     credentialService.userApiDataGormService = userApiDataGormService
     credentialService.userService = userService
@@ -46,6 +51,9 @@ class CredentialServiceCreateSpec extends Specification {
           _ as CreateCustomerDto ) >> new CustomerDto()
       1 * finerioConnectApiService.createCredential( _ as UserApiData,
           _ as CreateCredentialDto ) >> new CredentialDto()
+      1 * credentialConnectionService.create(
+          _ as CreateCredentialConnectionDto ) >>
+          new CredentialConnectionDto()
       result instanceof CredentialDto
 
   }

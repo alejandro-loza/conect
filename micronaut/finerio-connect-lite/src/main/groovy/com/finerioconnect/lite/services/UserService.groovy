@@ -8,5 +8,8 @@ interface UserService {
   @Log
   User getCurrent() throws Exception
 
+  @Log
+  User findOne( Long userId ) throws Exception
+
 }
 

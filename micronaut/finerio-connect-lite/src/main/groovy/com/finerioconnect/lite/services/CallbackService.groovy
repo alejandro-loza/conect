@@ -1,5 +1,6 @@
 package com.finerioconnect.lite.services
 
+import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.dtos.ApiListDto
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCallbackDto
@@ -23,5 +24,9 @@ interface CallbackService {
 
   @Log
   void delete( Long id ) throws Exception
+
+  @Log
+  CallbackDto findByUserIdAndNature( Long userId, Callback.Nature nature )
+      throws Exception
 
 }

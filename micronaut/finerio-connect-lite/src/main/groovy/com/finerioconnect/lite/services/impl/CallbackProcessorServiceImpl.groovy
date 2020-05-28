@@ -2,6 +2,7 @@ package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.dtos.AccountsCallbackDto
+import com.finerioconnect.lite.dtos.CreateCredentialConnectionHistoryDto
 import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
@@ -9,6 +10,7 @@ import com.finerioconnect.lite.dtos.TransactionsCallbackDto
 import com.finerioconnect.lite.services.CallbackProcessorService
 import com.finerioconnect.lite.services.CallbackRestService
 import com.finerioconnect.lite.services.CallbackService
+import com.finerioconnect.lite.services.CredentialConnectionHistoryService
 import com.finerioconnect.lite.services.CredentialConnectionService
 
 import javax.inject.Inject
@@ -22,6 +24,9 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
   @Inject
   CallbackService callbackService
+
+  @Inject
+  CredentialConnectionHistoryService credentialConnectionHistoryService
 
   @Inject
   CredentialConnectionService credentialConnectionService
@@ -99,6 +104,16 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
     }
 
     callbackRestService.post( callbackDto.url, successCallbackDto )
+
+
+    CreateCredentialConnectionHistoryDto dto =
+        new CreateCredentialConnectionHistoryDto()
+    dto.credentialConnectionId = credentialConnectionDto.id
+    dto.stage = nature.toString().toLowerCase() +
+        successCallbackDto instanceof NotifyCallbackDto ?
+        "_${(successCallbackDto as NotifyCallbackDto).stage.toLowerCase()}" :
+        ''
+    credentialConnectionHistoryService.create( dto )
 
   }
 

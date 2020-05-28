@@ -156,7 +156,7 @@ class CallbackServiceImpl implements CallbackService {
 
     try {
       return Nature.valueOf( rawNature )
-    } catch ( Exception e ) {
+    } catch ( NullPointerException | IllegalArgumentException e ) {
       throw new BadRequestException( 'callback.nature.invalid' )
     }
 
@@ -165,7 +165,6 @@ class CallbackServiceImpl implements CallbackService {
   private CallbackDto generateCallbackDto( Callback callback )
       throws Exception {
 
-    if ( callback == null ) { return null }
     def callbackDto = new CallbackDto()
     callbackDto.id = callback.id
     callbackDto.url = callback.url

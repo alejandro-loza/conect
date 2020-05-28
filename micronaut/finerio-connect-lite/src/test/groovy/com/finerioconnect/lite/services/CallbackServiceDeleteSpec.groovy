@@ -37,12 +37,26 @@ class CallbackServiceDeleteSpec extends Specification {
 
   }
 
-  def 'instance not found'() {
+  def 'instance not found (null)'() {
 
     given:
       def id = 1L
     when:
       1 * callbackGormService.get( _ as Long ) >> null
+      callbackService.delete( id )
+    then:
+      ItemNotFoundException e = thrown()
+      e.message == 'callback.not.found'
+
+  }
+
+  def 'instance not found (already deleted'() {
+
+    given:
+      def id = 1L
+    when:
+      1 * callbackGormService.get( _ as Long ) >>
+          new Callback( dateDeleted: new Date() )
       callbackService.delete( id )
     then:
       ItemNotFoundException e = thrown()

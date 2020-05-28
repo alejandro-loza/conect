@@ -9,7 +9,9 @@ import com.finerioconnect.lite.dtos.LoginResponseDto
 
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
+import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Header
+import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.client.annotation.Client
 
@@ -28,5 +30,9 @@ interface FinerioConnectClient {
   @Post('/credentials')
   CredentialDto createCredential( @Header String authorization,
       @Body CreateCredentialDto createCredentialDto )
+
+  @Delete('/credentials/{credentialId}')
+  void deleteCredential( @Header String authorization,
+      @PathVariable String credentialId )
 
 }

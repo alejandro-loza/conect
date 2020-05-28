@@ -1,6 +1,8 @@
 package com.finerioconnect.lite.services
 
 import com.finerioconnect.lite.domain.Callback
+import com.finerioconnect.lite.domain.User
+import com.finerioconnect.lite.domain.UserApiData
 import com.finerioconnect.lite.dtos.CallbackDto
 import com.finerioconnect.lite.dtos.CreateCredentialConnectionHistoryDto
 import com.finerioconnect.lite.dtos.CredentialConnectionDto
@@ -19,6 +21,9 @@ class CallbackProcessorServiceProcessSuccessSpec extends Specification {
   def credentialConnectionHistoryService =
       Mock( CredentialConnectionHistoryService )
   def credentialConnectionService = Mock( CredentialConnectionService )
+  def finerioConnectApiService = Mock( FinerioConnectApiService )
+  def userService = Mock( UserService )
+  def userApiDataGormService = Mock( UserApiDataGormService )
 
   def setup() {
 
@@ -28,6 +33,10 @@ class CallbackProcessorServiceProcessSuccessSpec extends Specification {
         credentialConnectionHistoryService
     callbackProcessorService.credentialConnectionService =
         credentialConnectionService
+    callbackProcessorService.finerioConnectApiService =
+        finerioConnectApiService
+    callbackProcessorService.userApiDataGormService = userApiDataGormService
+    callbackProcessorService.userService = userService
 
   }
 
@@ -48,6 +57,11 @@ class CallbackProcessorServiceProcessSuccessSpec extends Specification {
       1 * credentialConnectionHistoryService.create(
           _ as CreateCredentialConnectionHistoryDto ) >>
           new CredentialConnectionHistoryDto()
+      1 * userService.findOne( _ as Long ) >> new User()
+      1 * userApiDataGormService.findByUser( _ as User ) >>
+          new UserApiData()
+      1 * finerioConnectApiService.deleteCredential( _ as UserApiData,
+          _ as String )
       true
 
   }

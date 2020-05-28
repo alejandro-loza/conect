@@ -58,6 +58,25 @@ class FinerioConnectApiServiceImpl implements FinerioConnectApiService {
 
   }
 
+  @Override
+  void deleteCredential( UserApiData userApiData, String credentialId )
+      throws Exception {
+
+    if ( userApiData == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.deleteCredential.userApiData.null' )
+    }
+
+    if ( credentialId == null ) {
+      throw new IllegalArgumentException(
+          'finerioConnectApiService.deleteCredential.credentialId.null' )
+    }
+
+    finerioConnectClient.deleteCredential(
+        getAuthorizationHeader( userApiData ), credentialId )
+
+  }
+
   private String getAuthorizationHeader( UserApiData userApiData )
       throws Exception {
     return "Bearer ${getAccessToken( userApiData )}"

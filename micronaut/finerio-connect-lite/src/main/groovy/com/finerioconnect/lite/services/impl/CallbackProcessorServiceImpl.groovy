@@ -3,6 +3,7 @@ package com.finerioconnect.lite.services.impl
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.dtos.AccountsCallbackDto
 import com.finerioconnect.lite.dtos.CreateCredentialConnectionHistoryDto
+import com.finerioconnect.lite.dtos.CredentialConnectionDto
 import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
@@ -12,6 +13,9 @@ import com.finerioconnect.lite.services.CallbackRestService
 import com.finerioconnect.lite.services.CallbackService
 import com.finerioconnect.lite.services.CredentialConnectionHistoryService
 import com.finerioconnect.lite.services.CredentialConnectionService
+import com.finerioconnect.lite.services.FinerioConnectApiService
+import com.finerioconnect.lite.services.UserApiDataGormService
+import com.finerioconnect.lite.services.UserService
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +34,15 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
   @Inject
   CredentialConnectionService credentialConnectionService
+
+  @Inject
+  FinerioConnectApiService finerioConnectApiService
+
+  @Inject
+  UserApiDataGormService userApiDataGormService
+
+  @Inject
+  UserService userService
 
   @Override
   void processNotify( NotifyCallbackDto notifyCallbackDto )
@@ -104,16 +117,48 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
     }
 
     callbackRestService.post( callbackDto.url, successCallbackDto )
+    postProcessCallback( credentialConnectionDto, nature,
+        successCallbackDto )
 
+  }
+
+  private void postProcessCallback(
+      CredentialConnectionDto credentialConnectionDto,
+      Callback.Nature nature, SuccessCallbackDto successCallbackDto )
+      throws Exception {
+
+    createCredentialConnectionHistory( credentialConnectionDto.id, nature,
+        successCallbackDto )
+
+    if ( nature == Callback.Nature.SUCCESS ||
+        nature == Callback.Nature.FAILURE ) {
+      deleteCredential( successCallbackDto.credentialId,
+          credentialConnectionDto.userId )
+    }
+
+  }
+
+  private void createCredentialConnectionHistory(
+      Long credentialConnectionId, Callback.Nature nature,
+      SuccessCallbackDto successCallbackDto ) throws Exception {
 
     CreateCredentialConnectionHistoryDto dto =
         new CreateCredentialConnectionHistoryDto()
-    dto.credentialConnectionId = credentialConnectionDto.id
+    dto.credentialConnectionId = credentialConnectionId
     dto.stage = nature.toString().toLowerCase() +
         ( successCallbackDto instanceof NotifyCallbackDto ?
         "_${(successCallbackDto as NotifyCallbackDto).stage.toLowerCase()}" :
         '' )
     credentialConnectionHistoryService.create( dto )
+
+  }
+
+  private void deleteCredential( String credentialId, Long userId )
+      throws Exception {
+
+    def user = userService.findOne( userId )
+    def userApiData = userApiDataGormService.findByUser( user )
+    finerioConnectApiService.deleteCredential( userApiData, credentialId )
 
   }
 

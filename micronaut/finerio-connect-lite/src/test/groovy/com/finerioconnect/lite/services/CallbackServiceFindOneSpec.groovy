@@ -27,22 +27,36 @@ class CallbackServiceFindOneSpec extends Specification {
     given:
       def id = 1L
     when:
-      1 * userService.getCurrent() >> new User()
       1 * callbackGormService.get( _ as Long ) >>
           new Callback( user: new User() )
+      1 * userService.getCurrent() >> new User()
       def result = callbackService.findOne( id )
     then:
       result instanceof CallbackDto
 
   }
 
-  def 'instance not found'() {
+  def 'instance not found (null)'() {
 
     given:
       def id = 1L
     when:
       1 * callbackGormService.get( _ as Long ) >> null
-      def result = callbackService.findOne( id )
+      callbackService.findOne( id )
+    then:
+      ItemNotFoundException e = thrown()
+      e.message == 'callback.not.found'
+
+  }
+
+  def 'instance not found (already deleted)'() {
+
+    given:
+      def id = 1L
+    when:
+      1 * callbackGormService.get( _ as Long ) >>
+          new Callback( dateDeleted: new Date() )
+      callbackService.findOne( id )
     then:
       ItemNotFoundException e = thrown()
       e.message == 'callback.not.found'
@@ -57,7 +71,7 @@ class CallbackServiceFindOneSpec extends Specification {
       1 * userService.getCurrent() >> new User( id: 1L )
       1 * callbackGormService.get( _ as Long ) >>
           new Callback( user: new User( id: 2L ) )
-      def result = callbackService.findOne( id )
+      callbackService.findOne( id )
     then:
       ItemNotFoundException e = thrown()
       e.message == 'callback.not.found'

@@ -42,13 +42,28 @@ class CallbackServiceUpdateSpec extends Specification {
 
   }
 
-  def 'instance not found'() {
+  def 'instance not found (null)'() {
 
     given:
       def id = 1L
       def updateCallbackDto = new UpdateCallbackDto()
     when:
       1 * callbackGormService.get( _ as Long ) >> null
+      def result = callbackService.update( id, updateCallbackDto )
+    then:
+      ItemNotFoundException e = thrown()
+      e.message == 'callback.not.found'
+
+  }
+
+  def 'instance not found (already deleted)'() {
+
+    given:
+      def id = 1L
+      def updateCallbackDto = new UpdateCallbackDto()
+    when:
+      1 * callbackGormService.get( _ as Long ) >>
+          new Callback( dateDeleted: new Date() )
       def result = callbackService.update( id, updateCallbackDto )
     then:
       ItemNotFoundException e = thrown()

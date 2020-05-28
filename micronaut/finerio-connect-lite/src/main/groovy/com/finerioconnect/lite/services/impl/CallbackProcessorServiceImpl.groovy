@@ -110,9 +110,9 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
         new CreateCredentialConnectionHistoryDto()
     dto.credentialConnectionId = credentialConnectionDto.id
     dto.stage = nature.toString().toLowerCase() +
-        successCallbackDto instanceof NotifyCallbackDto ?
+        ( successCallbackDto instanceof NotifyCallbackDto ?
         "_${(successCallbackDto as NotifyCallbackDto).stage.toLowerCase()}" :
-        ''
+        '' )
     credentialConnectionHistoryService.create( dto )
 
   }

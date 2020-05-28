@@ -17,4 +17,8 @@ interface FinerioConnectApiService {
   CredentialDto createCredential( UserApiData userApiData,
       CreateCredentialDto createCredentialDto ) throws Exception
 
+  @Log
+  void deleteCredential( UserApiData userApiData, String credentialId )
+      throws Exception
+
 }

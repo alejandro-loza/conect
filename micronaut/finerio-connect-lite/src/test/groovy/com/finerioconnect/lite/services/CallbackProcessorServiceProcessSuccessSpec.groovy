@@ -57,7 +57,7 @@ class CallbackProcessorServiceProcessSuccessSpec extends Specification {
       1 * credentialConnectionHistoryService.create(
           _ as CreateCredentialConnectionHistoryDto ) >>
           new CredentialConnectionHistoryDto()
-      1 * userService.getCurrent() >> new User()
+      1 * userService.findOne( _ as Long ) >> new User()
       1 * userApiDataGormService.findByUser( _ as User ) >>
           new UserApiData()
       1 * finerioConnectApiService.deleteCredential( _ as UserApiData,

@@ -3,6 +3,7 @@ package com.finerioconnect.lite.services.impl
 import com.finerioconnect.lite.domain.Callback
 import com.finerioconnect.lite.dtos.AccountsCallbackDto
 import com.finerioconnect.lite.dtos.CreateCredentialConnectionHistoryDto
+import com.finerioconnect.lite.dtos.CredentialConnectionDto
 import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
@@ -76,7 +77,6 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
     processCallback( successCallbackDto, 'processSuccess',
         'successCallbackDto', Callback.Nature.SUCCESS )
-    deleteCredential( successCallbackDto.credentialId )
 
   }
 
@@ -86,7 +86,6 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
     processCallback( failureCallbackDto, 'processFailure',
         'failureCallbackDto', Callback.Nature.FAILURE )
-    deleteCredential( failureCallbackDto.credentialId )
 
   }
   
@@ -118,13 +117,29 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
     }
 
     callbackRestService.post( callbackDto.url, successCallbackDto )
-    createCredentialConnectionHistory( credentialConnectionDto.id, nature,
+    postProcessCallback( credentialConnectionDto, nature,
         successCallbackDto )
 
   }
 
+  private void postProcessCallback(
+      CredentialConnectionDto credentialConnectionDto,
+      Callback.Nature nature, SuccessCallbackDto successCallbackDto )
+      throws Exception {
+
+    createCredentialConnectionHistory( credentialConnectionDto.id, nature,
+        successCallbackDto )
+
+    if ( nature == Callback.Nature.SUCCESS ||
+        nature == Callback.Nature.FAILURE ) {
+      deleteCredential( successCallbackDto.credentialId,
+          credentialConnectionDto.userId )
+    }
+
+  }
+
   private void createCredentialConnectionHistory(
-      String credentialConnectionId, Callback.Nature nature,
+      Long credentialConnectionId, Callback.Nature nature,
       SuccessCallbackDto successCallbackDto ) throws Exception {
 
     CreateCredentialConnectionHistoryDto dto =
@@ -138,10 +153,11 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
   }
 
-  private void deleteCredential( String credentialId ) throws Exception {
+  private void deleteCredential( String credentialId, Long userId )
+      throws Exception {
 
-    def currentUser = userService.getCurrent()
-    def userApiData = userApiDataGormService.findByUser( currentUser )
+    def user = userService.findOne( userId )
+    def userApiData = userApiDataGormService.findByUser( user )
     finerioConnectApiService.deleteCredential( userApiData, credentialId )
 
   }

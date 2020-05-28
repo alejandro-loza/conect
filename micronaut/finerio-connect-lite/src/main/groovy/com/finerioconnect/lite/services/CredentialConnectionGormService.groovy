@@ -10,4 +10,6 @@ interface CredentialConnectionGormService {
 
   CredentialConnection findByCredentialId( String credentialId )
 
+  CredentialConnection get( Serializable id )
+
 }

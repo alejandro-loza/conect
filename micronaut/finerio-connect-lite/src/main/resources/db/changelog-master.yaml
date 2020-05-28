@@ -11,3 +11,5 @@ databaseChangeLog:
     file: db/callback.yaml
 - include:
     file: db/credential_connection.yaml
+- include:
+    file: db/credential_connection_history.yaml

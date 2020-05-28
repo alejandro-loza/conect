@@ -1,6 +1,7 @@
 package com.finerioconnect.lite.services.impl
 
 import com.finerioconnect.lite.domain.Callback
+import com.finerioconnect.lite.dtos.AccountsCallbackDto
 import com.finerioconnect.lite.dtos.FailureCallbackDto
 import com.finerioconnect.lite.dtos.NotifyCallbackDto
 import com.finerioconnect.lite.dtos.SuccessCallbackDto
@@ -31,6 +32,15 @@ class CallbackProcessorServiceImpl implements CallbackProcessorService {
 
     processCallback( notifyCallbackDto, 'processNotify',
         'notifyCallbackDto', Callback.Nature.NOTIFY )
+
+  }
+  
+  @Override
+  void processAccounts( AccountsCallbackDto accountsCallbackDto )
+      throws Exception {
+
+    processCallback( accountsCallbackDto, 'processAccounts',
+        'accountsCallbackDto', Callback.Nature.ACCOUNTS )
 
   }
   

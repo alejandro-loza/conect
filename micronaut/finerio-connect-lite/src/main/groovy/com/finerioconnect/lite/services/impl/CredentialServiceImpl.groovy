@@ -46,7 +46,8 @@ class CredentialServiceImpl implements CredentialService {
     createCredentialDto.customerId = customerDto.id
     def credentialDto = finerioConnectApiService.createCredential(
         userApiData, createCredentialDto )
-    createCredentialConnection( currentUser, credentialDto.id )
+    createCredentialConnection( currentUser, credentialDto.id,
+        createCredentialDto.customId )
     return credentialDto
 
   }
@@ -61,12 +62,13 @@ class CredentialServiceImpl implements CredentialService {
 
   }
 
-  private void createCredentialConnection( User currentUser,
-      String credentialId ) throws Exception {
+  private void createCredentialConnection( User user, String credentialId,
+      String customId ) throws Exception {
 
     def createCredentialConnectionDto = new CreateCredentialConnectionDto()
-    createCredentialConnectionDto.user = currentUser
+    createCredentialConnectionDto.user = user
     createCredentialConnectionDto.credentialId = credentialId
+    createCredentialConnectionDto.customId = customId
     credentialConnectionService.create( createCredentialConnectionDto )
 
   }

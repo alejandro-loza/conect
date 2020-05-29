@@ -8,5 +8,6 @@ class CredentialConnectionDto {
   Long id
   Long userId
   String credentialId
+  String customId
 
 }

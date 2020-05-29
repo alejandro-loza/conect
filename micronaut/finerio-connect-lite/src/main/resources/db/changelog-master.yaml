@@ -13,3 +13,5 @@ databaseChangeLog:
     file: db/credential_connection.yaml
 - include:
     file: db/credential_connection_history.yaml
+- include:
+    file: db/credential_connection_add_custom_id.yaml

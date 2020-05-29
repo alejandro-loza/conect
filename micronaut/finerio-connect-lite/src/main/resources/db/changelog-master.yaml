@@ -1,0 +1,17 @@
+databaseChangeLog:
+- include:
+    file: db/user.yaml
+- include:
+    file: db/role.yaml
+- include:
+    file: db/user_role.yaml
+- include:
+    file: db/user_api_data.yaml
+- include:
+    file: db/callback.yaml
+- include:
+    file: db/credential_connection.yaml
+- include:
+    file: db/credential_connection_history.yaml
+- include:
+    file: db/credential_connection_add_custom_id.yaml

@@ -1,0 +1,31 @@
+micronaut:
+  application:
+    name: finerio-connect-lite
+  security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: true
+      oauth:
+        enabled: true
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: YourSecretKeyGoesHere
+dataSource:
+  pooled: true
+  dbCreate: none
+  url: ${JDBC_URL:`jdbc:h2:mem:default;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`}
+  driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+  username: ${JDBC_USER:sa}
+  password: ${JDBC_PASSWORD:""}
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/changelog-master.yaml'
+finerioconnect:
+  api:
+    url: 'https://api-v2.finerio.mx'

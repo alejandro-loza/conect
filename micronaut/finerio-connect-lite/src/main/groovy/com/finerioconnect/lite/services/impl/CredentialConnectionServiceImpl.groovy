@@ -32,12 +32,15 @@ class CredentialConnectionServiceImpl
     credentialConnection.user = createCredentialConnectionDto.user
     credentialConnection.credentialId =
         createCredentialConnectionDto.credentialId
+    credentialConnection.customId =
+        createCredentialConnectionDto.customId
     def instance = credentialConnectionGormService.save(
         credentialConnection )
     def credentialConnectionDto = new CredentialConnectionDto()
     credentialConnectionDto.id = instance.id
     credentialConnectionDto.userId = instance.user.id
     credentialConnectionDto.credentialId = instance.credentialId
+    credentialConnectionDto.customId = instance.customId
     return credentialConnectionDto
 
   }

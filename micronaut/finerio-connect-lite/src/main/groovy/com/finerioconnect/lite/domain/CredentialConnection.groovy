@@ -12,11 +12,13 @@ class CredentialConnection implements GormEntity<CredentialConnection> {
 
   User user
   String credentialId
+  String customId
   Date dateCreated
   Date lastUpdated
   Date dateDeleted
 
   static constraints = { 
+    customId nullable: true
     dateDeleted nullable: true
   }
 

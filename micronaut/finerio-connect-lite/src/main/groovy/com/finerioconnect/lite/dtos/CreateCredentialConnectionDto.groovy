@@ -9,5 +9,6 @@ class CreateCredentialConnectionDto {
 
   User user
   String credentialId
+  String customId
 
 }
